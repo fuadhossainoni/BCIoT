@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Blockchain Based IoT Network</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./web3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+</head>
+<body>
+	<br><br>
+	<p align="center" style="font-size:30px"><u><strong>BLOCKCHAIN BASED IoT DEMONSTRATION</strong></u></p>
+	
+  <style>
+    #demo{
+      padding: 20px;
+      background-color: #8EEB53;
+      color: black;
+    }
+  </style>
+  <br>
+    <form id="my_form" onsubmit="myFunction()"> 
+        <div class="form-group align-items-stretch" align="center" >
+            <label class="col-sm-12" align="center" for="unit_price"> Enter a Random Message</label>
+            <div class="col-sm-12 justify-content-center box"  >
+				<INPUT type="text" STYLE="color: #FFFFFF; font-family: Verdana; font-weight: bold; font-size: 20px; background-color: #72A4D2;" size="30" maxlength="30" id="msg" name="msg" class="my_msg" required>
+             </div>
+        
+        </div>
+        <br>
+        <div class="form-group align-items-stretch" align="center" >
+            <label class="col-sm-12" align="center" for="unit_price"> Enter the Address</label>
+            <div class="col-sm-12 justify-content-center box"  >
+              <INPUT type="text" STYLE="color: #FFFFFF; font-family: Verdana; font-weight: bold; font-size: 20px; background-color: #72A4D2;" size="40" maxlength="40" id="address" name="address" class="my_msg" required>
+             </div>
+        
+        </div>
+    <br>
+  </form>
+        <div align="center" class="col-sm-12">
+          <input type="button"  class="btn btn-primary" id="a" value="ADD" onclick="addit()">
+          <input type="submit"  class="btn btn-primary" id="b" value="DELETE" onclick="dltit()">
+          <input type="submit"  class="btn btn-primary" id="c" value="CHECK CONNECTIVITY" onclick="cc()">
+           </div>
+           <br><br>
+    <div align="center" class="col-sm-12" background-color: hsla(50, 33%, 25%, .75);>
+    <p id="demo">
+
+    </p>
+  </div>
+</body>
+</html>
+<script>
+if (typeof web3 !== 'undefined') {
+  web3 = new Web3(web3.currentProvider);
+  } else {
+    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+  }
+
+//***change the abi if contract file or .sol changes
+var contractABI = web3.eth.contract([
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "hashadd",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes",
+				"name": "signatureadd",
+				"type": "bytes"
+			},
+			{
+				"internalType": "address",
+				"name": "targetadd",
+				"type": "address"
+			}
+		],
+		"name": "addit",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "hashdlt",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes",
+				"name": "signaturedlt",
+				"type": "bytes"
+			},
+			{
+				"internalType": "address",
+				"name": "targetdlt",
+				"type": "address"
+			}
+		],
+		"name": "dltit",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "hash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes",
+				"name": "signature",
+				"type": "bytes"
+			}
+		],
+		"name": "check",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "hashcnc",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes",
+				"name": "signaturecnc",
+				"type": "bytes"
+			},
+			{
+				"internalType": "address",
+				"name": "targetcnc",
+				"type": "address"
+			}
+		],
+		"name": "connectivity_check",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "hash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes",
+				"name": "signature",
+				"type": "bytes"
+			}
+		],
+		"name": "recover",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]		//change the abi and the address only
+  );
+contract = contractABI.at('0xec809d3873d77E1F7638A56213425fD36c476495');    //***change it if blockchain changes
+
+web3.eth.defaultAccount=web3.eth.accounts[0];
+
+//3 functions
+
+function addit() {
+  const addstart = async () => {    
+    var umsg = document.getElementById("msg").value;
+  var target = document.getElementById("address").value;
+  
+  if(umsg!=''&&target!=''){
+   var unlockedAccount = web3.eth.accounts[0]
+   var message = web3.sha3(umsg)
+   var signature = await web3.eth.sign(unlockedAccount,message)
+  var result = contract.addit(message, signature, target);
+  console.log(result[0]);
+  if(result[0]==0){
+  document.getElementById("demo").innerHTML = "The Device: "+target+" has been <mark><b>ADDED</b></mark> to the Network.";
+  }
+  else if(result[0]==1){
+  document.getElementById("demo").innerHTML = "The Device: "+target+" is <mark><b>ALREADY CONNECTED</b></mark> to the Network.";
+  }
+}
+
+  else{
+    alert("Enter properly !!!");
+    return;
+  }
+}
+addstart();
+}
+
+
+function dltit() {
+  const dltstart = async () => {    
+  var umsg = document.getElementById("msg").value;
+  var target = document.getElementById("address").value;
+
+  if(umsg!=''&&target!=''){
+   var unlockedAccount = web3.eth.accounts[0]
+   var message = web3.sha3(umsg)
+   var signature = await web3.eth.sign(unlockedAccount,message)
+  var result = contract.dltit(message, signature, target);
+  document.getElementById("demo").innerHTML = "The Device: "+target+" has been <mark><b>DELETED</b></mark> from the Network.";
+}
+else{
+    alert("Enter properly !!!");
+    return;
+  }
+}
+dltstart();  
+}
+
+
+function cc() {
+  const ccstart = async () => {    
+  var umsg = document.getElementById("msg").value;
+  var target = document.getElementById("address").value;
+
+if(umsg!=''&&target!=''){
+   var unlockedAccount = web3.eth.accounts[0]
+   var message = web3.sha3(umsg)
+   var signature = web3.eth.sign(unlockedAccount,message)
+  var result = contract.connectivity_check(message, signature, target);
+  if(result[0]==true && result[1]==true){
+    document.getElementById("demo").innerHTML ="Requested Device "+target+" is <mark><b>CONNECTED</b></mark> to the Network.";
+  }
+  else if(result[0]==true && result[1]==false){
+    document.getElementById("demo").innerHTML ="Requested Device "+target+" is <mark><b>NOT CONNECTED</b></mark> to the Network.";
+  }
+  else{
+	  console.log(message);
+	  console.log(signature);
+    document.getElementById("demo").innerHTML ="Requester is <mark><b>NOT CONNECTED</b></mark> to the Network,<br>IT IS A BREACH !!!";
+  }
+}
+else{
+    alert("Enter properly !!!");
+    return;
+  }
+}
+ccstart();
+}
+ </script>
